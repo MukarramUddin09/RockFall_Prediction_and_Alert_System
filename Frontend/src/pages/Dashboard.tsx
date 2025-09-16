@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+// import { Button } from "@/components/ui/button";
 import {
   Activity,
   AlertTriangle,
@@ -58,6 +61,24 @@ const mockRecentData = [
 ];
 
 export default function Dashboard() {
+
+  const navigate = useNavigate();
+
+  // 🔐 Protect route: redirect if no token
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // 🔓 Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "critical":

@@ -11,9 +11,21 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/hooks/useTheme";
+import { useNavigate } from "react-router-dom"; // 🔹 Added for navigation
 
 export function TopBar() {
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate(); // 🔹 Initialize navigation
+
+  // 🔓 Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Clear JWT
+    // document.documentElement.setAttribute("data-theme", theme);
+     setTimeout(() => {
+    navigate("/");
+  }, 50); // short delay to let theme rehydrate
+    // navigate("/"); // Redirect to login
+  };
 
   return (
     <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm">
@@ -79,7 +91,10 @@ export function TopBar() {
                 Profile
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem
+                onClick={handleLogout} // 🔹 Added logout logic
+                className="text-destructive cursor-pointer"
+              >
                 Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>
